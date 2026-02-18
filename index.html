@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>2ChatGot Kids App</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+text-align:center;
+background:url("https://i.imgur.com/6Iej2c3.png");
+background-size:cover;
+color:white;
+}
+
+.screen{
+display:none;
+padding:20px;
+}
+
+button{
+
+padding:15px;
+margin:10px;
+font-size:18px;
+border:none;
+border-radius:10px;
+background:#2196F3;
+color:white;
+
+}
+
+button:hover{
+
+background:#0b7dda;
+
+}
+
+#gameCircle{
+
+width:150px;
+height:150px;
+border-radius:50%;
+background:green;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:50px;
+margin:auto;
+margin-top:20px;
+cursor:pointer;
+
+}
+
+input{
+
+padding:10px;
+font-size:18px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- SOUND -->
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3"></audio>
+
+<!-- LOGIN -->
+
+<div id="login" class="screen" style="display:block">
+
+<h1>Parent Login</h1>
+
+<input id="passwordInput" type="password" placeholder="Set password">
+
+<br>
+
+<button onclick="login()">Login</button>
+
+</div>
+
+
+
+<!-- CHILD MODE -->
+
+<div id="child" class="screen">
+
+<h1>Child Mode</h1>
+
+<p id="readingStatus"></p>
+
+<p id="sleepStatus"></p>
+
+<h2>Game</h2>
+
+<p>Score: <span id="score">0</span></p>
+
+<button onclick="startGame()">Play Game</button>
+
+<div id="gameCircle" onclick="tapGame()" style="display:none">
+
+<span id="number">0</span>
+
+</div>
+
+<br>
+
+<button onclick="parentLogin()">Parent Mode</button>
+
+</div>
+
+
+
+<!-- PARENT MODE -->
+
+<div id="parent" class="screen">
+
+<h1>Parent Dashboard</h1>
+
+<button onclick="startReading()">Start Reading (1 min)</button>
+
+<button onclick="startSleep()">Start Sleep (1 min)</button>
+
+<br>
+
+<button onclick="goChild()">Back to Child</button>
+
+</div>
+
+
+
+<script>
+
+
+let savedPassword=""
+let score=0
+let reading=0
+let sleep=0
+let gameStarted=false
+
+
+function playSound(){
+
+document.getElementById("clickSound").play()
+
+}
+
+
+function login(){
+
+savedPassword=
+document.getElementById("passwordInput").value
+
+if(savedPassword==""){
+
+alert("enter password")
+return
+
+}
+
+show("child")
+
+}
+
+
+function parentLogin(){
+
+let p=prompt("Enter password")
+
+if(p==savedPassword){
+
+show("parent")
+
+}
+
+else{
+
+alert("wrong password")
+
+}
+
+}
+
+
+function goChild(){
+
+show("child")
+
+}
+
+
+function show(id){
+
+document.getElementById("login").style.display="none"
+document.getElementById("child").style.display="none"
+document.getElementById("parent").style.display="none"
+
+document.getElementById(id).style.display="block"
+
+}
+
+
+function startReading(){
+
+reading=60
+
+updateStatus()
+
+}
+
+
+function startSleep(){
+
+sleep=60
+
+updateStatus()
+
+}
+
+
+function updateStatus(){
+
+document.getElementById("readingStatus").innerHTML="Reading: "+reading
+
+document.getElementById("sleepStatus").innerHTML="Sleep: "+sleep
+
+}
+
+
+setInterval(()=>{
+
+if(reading>0) reading--
+
+if(sleep>0) sleep--
+
+updateStatus()
+
+},1000)
+
+
+
+function startGame(){
+
+if(reading>0 || sleep>0){
+
+alert("Game Locked")
+
+return
+
+}
+
+playSound()
+
+gameStarted=true
+
+score=0
+
+document.getElementById("score").innerHTML=score
+
+document.getElementById("gameCircle").style.display="flex"
+
+newNumber()
+
+}
+
+
+function tapGame(){
+
+if(!gameStarted) return
+
+playSound()
+
+score++
+
+document.getElementById("score").innerHTML=score
+
+newNumber()
+
+}
+
+
+function newNumber(){
+
+let n=Math.floor(Math.random()*9)+1
+
+document.getElementById("number").innerHTML=n
+
+}
+
+
+
+</script>
+
+
+</body>
+</html>
